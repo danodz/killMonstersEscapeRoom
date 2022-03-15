@@ -14,19 +14,6 @@
             "second",
             "third"
         ];
-
-        var textsRandom = [ {first: "That's a lot of people.", second: ["A", "B", "C"]},
-            {first: "You wiped everyone in the room. Now more enemies are coming.", second: ["A", "B", "C"]},
-            {first: "A necromancer arrives, revives all enemies and then some more, and leaves.", second: ["A", "B", "C"]}
-        ];
-        var weights = [];
-        var indexes = [];
-        for(var i=0; i<textsRandom.length; i++)
-        {
-            indexes.push(i);
-            weights.push(textsRandom.length-i-1);
-        }
-
         var amount = document.querySelector(".amount");
         amount.focus();
 
@@ -42,36 +29,18 @@
         {
             amount.value = "";
             progress += 1;
-            if(progress < textsProgress.length)
+            document.querySelector(".randomText").innerHTML = textsProgress[progress];
+
+            if(dropdown.hidden && progress >= 3 && (Math.floor(Math.random()*10) == 0 || progress == textsProgress.length+3))
             {
-                document.querySelector(".randomText").innerHTML = textsProgress[progress];
+                dropdown.hidden = false;
+                amount.hidden = true;
             }
             else
             {
-                if(progress == 50)
-                {
-                    var text = {first:"You're really still playing that game? You know there’s no end, right?", second:[""]};
-                }
-                else
-                {
-                    var index = weighted(indexes, weights);
-                    var text = textsRandom[index]
-                    textsRandom.splice(index,1);
-                    textsRandom.push(text);
-                }
-                document.querySelector(".randomText").innerHTML = text.first + text.second[Math.floor(Math.random()*text.second.length)];
-
-                if(dropdown.hidden && (Math.floor(Math.random()*10) == 0 || progress == textsProgress.length+3))
-                {
-                    dropdown.hidden = false;
-                    amount.hidden = true;
-                }
-                else
-                {
-                    dropdown.hidden = true;
-                    amount.hidden = false;
-                    amount.focus();
-                }
+                dropdown.hidden = true;
+                amount.hidden = false;
+                amount.focus();
             }
         }
 
@@ -91,7 +60,6 @@
                 enterUp = true;
             }
         }
-        function weighted(a,b,c){if(a.length!==b.length)throw new RangeError("Chance: length of array and weights must match");for(var d,e=0,f=0;f<b.length;++f)d=b[f],d>0&&(e+=d);if(0===e)throw new RangeError("Chance: no valid entries in array weights");var g,h=Math.random()*e,i=0,j=-1;for(f=0;f<b.length;++f){if(d=b[f],i+=d,d>0){if(i>=h){g=f;break}j=f}f===b.length-1&&(g=j)}var k=a[g];return c="undefined"==typeof c?!1:c,c&&(a.splice(g,1),b.splice(g,1)),k}
     </script>
 
     <style>
